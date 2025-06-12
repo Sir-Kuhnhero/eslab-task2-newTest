@@ -345,11 +345,11 @@ The Latest Deadline First (LDF) scheduling algorithm for a single node prioritiz
 
 #### Selection of Tasks
 
-- Among the tasks that can be scheduled, the task with the latest deadline is selected for execution. This ensures that tasks with the furthest deadlines are given priority.
+- Among the tasks that can be scheduled, the task with the latest deadline is selected for execution. This key step defines the "right-to-left" scheduling behavior.
 
 #### Task Execution
 
-- Once a task is selected, it is scheduled for execution on the single computational node. The start time is determined based on the completion time of the previously scheduled task, ensuring no overlap.
+- Once a task is selected, it is scheduled for execution on the single computational node. The start and end time is determined based on the start time of the previously scheduled task, ensuring no overlap. Due to the "right-to-left" behavior new tasks are scheduled right before the previously scheduled task.
 
 #### Dependency Management
 
@@ -361,7 +361,7 @@ The Latest Deadline First (LDF) scheduling algorithm for a single node prioritiz
 
 #### Handling Task Completion and Deadlines
 
-- The end time of each task is calculated based on its Worst-Case Execution Time (WCET). If a task's completion time exceeds its deadline, it is marked as a missed deadline. The algorithm continues this process until all tasks are scheduled.
+- The end time of each task is calculated based on its Worst-Case Execution Time (WCET). If a task's completion time exceeds its deadline, it is marked as a missed deadline and tasks dependent on it that have already scheduled have to be removed from the schedule. The algorithm continues this process until all tasks are scheduled.
 
 This method maximizes the utilization of available time before their deadlines, while allowing tasks with earlier deadlines to be handled with the flexibility provided by scheduling tasks with later deadlines first. The LDF algorithm is particularly useful in scenarios where tasks with later deadlines are more critical or have higher priority for completion.
 
@@ -549,6 +549,7 @@ The **Latest Deadline First (LDF) Multi-Node (Without Communication Delay)** alg
 #### Initialization
 
 - **Identify Leaf Tasks:** The algorithm begins by identifying tasks with no successors (leaf tasks). These tasks are selected first for scheduling.
+- **Task ordering:** Tasks are first ordered in the order they would be scheduled on a single node setup, enabling the final schedule to be build from left-to-right since the order is already known.
 - **Task Selection:** The tasks with the latest deadlines are prioritized for scheduling first, enabling other tasks with earlier deadlines to wait as long as possible.
 
 #### Node Selection
